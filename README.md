@@ -14,7 +14,6 @@ docker image `icinga/icinga2`.
 
 ## TODOs
 
-* supervisord config
 * default icingaweb2 config including symlinks
 * demo config for icinga2
 * snapshot or release packages?
@@ -42,12 +41,40 @@ Build a new container based on this repository:
     $ sudo docker pull centos:centos7
     $ sudo docker build -t icinga/icinga2 .
 
+
+## Tools
+
+### Icinga 2
+
+The configuration is located in /etc/icinga2 which is exposed as volume from
+docker.
+
+By default the icinga database is created, and `ido-mysql` and `command` features
+are enabled.
+
 ### Icinga Web 2
 
-Icinga Web 2 can be accessed at /icingaweb2 w/ icingaadmin:icinga as credentials.
+Icinga Web 2 can be accessed at http://localhost:3080/icingaweb2 w/ icingaadmin:icinga as credentials.
+
+The configuration is located in /etc/icingaweb2 which is exposed as volume from
+docker.
+
+By default the icingaweb2 database is created including the `icingaadmin` user. Additional
+configuration is also entered to skip the setup wizard.
+
+## Ports
+
+The following ports are exposed: 22, 80, 443, 5665
 
 ## Volumes
+
+These volumes can be mounted in order to test various stuff.
 
     /etc/icinga2
     /etc/icingaweb2
     /var/lib/icinga2
+
+# Thanks
+
+* Jordan Jethwa for the initial [icinga2 docker image for Debian](https://github.com/jjethwa/icinga2)
+
