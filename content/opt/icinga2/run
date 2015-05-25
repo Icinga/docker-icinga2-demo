@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+
+initfile=/opt/icinga2/init.done
+
+if [ ! -f "${initfile}" ]; then
+        echo "Starting DB schema import."
+        mysql_install_db --user=mysql --ldata=/var/lib/mysql
+        /usr/bin/mysqld_safe & \
+        sleep 10 \
+        mysql -uroot -e "CREATE DATABASE icinga ; GRANT ALL ON icinga.* TO icinga@localhost IDENTIFIED BY 'icinga';" \
+        mysql -uicinga -picinga icinga < /usr/share/icinga2-ido-mysql/schema/mysql.sql \
+        mysql -uroot -e "CREATE DATABASE icingaweb2 ; GRANT ALL ON icingaweb2.* TO icingaweb2@localhost IDENTIFIED BY 'icingaweb2';" \
+        mysql -uicingaweb2 -picingaweb2 icingaweb2 < /usr/share/doc/icingaweb2/schema/mysql.schema.sql \
+        mysql -uicingaweb2 -picingaweb2 icingaweb2 -e "INSERT INTO icingaweb_user (name, active, password_hash) VALUES ('icingaadmin', 1, '$1$iQSrnmO9$T3NVTu0zBkfuim4lWNRmH.');" \
+        killall mysqld_safe
+
+        echo "Fix volume permissions."
+        # fix volume permissions, if any
+        # kudos to jjethwa/icinga2
+        chown -R icinga:root /etc/icinga2
+        chown -R icinga:icinga /var/lib/icinga2
+        chown root:icingaweb2 /etc/icingaweb2
+        chmod 2770 /etc/icingaweb2
+        chown -R apache:icingaweb2 /etc/icingaweb2/*
+        find /etc/icingaweb2 -type f -name "*.ini" -exec chmod 660 {} \;
+        find /etc/icingaweb2 -type d -exec chmod 2770 {} \;
+
+        echo "Enabling icinga2 features."
+        # enable icinga2 features if not already there
+        icinga2 feature enable ido-mysql command
+
+        touch ${initfile}
+fi
+
+echo "Starting Supervisor."
+/usr/bin/supervisord >> /dev/null
