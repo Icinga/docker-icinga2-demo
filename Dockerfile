@@ -19,7 +19,8 @@ RUN yum -y update; yum clean all; \
 
 RUN yum -y install vim bind-utils cronie logrotate supervisor openssh-server rsyslog sudo pwgen psmisc \
  httpd nagios-plugins-all mariadb-server mariadb-libs mariadb; yum clean all; \
- yum -y install --enablerepo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli; yum clean all;
+ yum -y install --enablerepo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli php-ZendFramework php-ZendFramework-Db-Adapter-Pdo-Mysql; \
+ yum clean all;
 
 # includes supervisor config
 ADD content/ /
