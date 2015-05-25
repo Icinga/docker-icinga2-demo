@@ -24,7 +24,7 @@ RUN yum -y install vim bind-utils cronie logrotate supervisor openssh-server rsy
 
 # includes supervisor config
 ADD content/ /
-RUN chmod u+x /opt/icinga2/run
+RUN chmod u+x /opt/icinga2/initdocker
 
 # no PAM
 # http://stackoverflow.com/questions/18173889/cannot-access-centos-sshd-on-docker
@@ -44,7 +44,7 @@ RUN sed -i -e 's/^\(UsePAM\s\+.\+\)/#\1/gi' /etc/ssh/sshd_config; \
 RUN mkdir -p /var/log/supervisor
 
 # ports
-EXPOSE 22 80 443 5665
+EXPOSE 22 80 443 5665 3306
 
 # volumes
 VOLUME ["/etc/icinga2", "/etc/icingaweb2", "/var/lib/icinga2"]
@@ -56,6 +56,6 @@ RUN echo 'syntax on' >> /root/.vimrc; \
  echo 'alias vi="vim"' >> /home/appuser/.bash_profile;
 
 # change this to entrypoint preventing bash login
-CMD ["/opt/icinga2/run"]
-#ENTRYPOINT ["/opt/icinga2/run"]
+CMD ["/opt/icinga2/initdocker"]
+#ENTRYPOINT ["/opt/icinga2/initdocker"]
 

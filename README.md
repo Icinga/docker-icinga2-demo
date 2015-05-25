@@ -14,7 +14,6 @@ docker image `icinga/icinga2`.
 
 ## TODOs
 
-* default icingaweb2 config including symlinks
 * demo config for icinga2
 * snapshot or release packages?
 * more than centos7
