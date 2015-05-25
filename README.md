@@ -39,6 +39,7 @@ Start a new privileged container, bind the cgroups and port 80:
 
 Build a new container based on this repository:
 
+    $ sudo docker pull centos:centos7
     $ sudo docker build -t icinga/icinga2 .
 
 ### Icinga Web 2
