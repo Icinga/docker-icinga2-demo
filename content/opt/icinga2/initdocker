@@ -17,26 +17,6 @@ if [ ! -f "${initfile}" ]; then
         killall mysqld
         sleep 10s
 
-        echo "Fix volume permissions."
-	# icinga2
-        chown -R icinga:root /etc/icinga2
-	mkdir -p /var/run/icinga2
-	mkdir -p /var/log/icinga2
-	chown icinga:icingacmd /var/run/icinga2
-	chown icinga:icingacmd /var/log/icinga2
-	mkdir -p /var/run/icinga2/cmd
-	chown icinga:icingacmd /var/run/icinga2/cmd
-	chmod 2750 /var/run/icinga2/cmd
-        chown -R icinga:icinga /var/lib/icinga2
-	usermod -a -G icingacmd apache >> /dev/null
-	# icingaweb2
-        chown root:icingaweb2 /etc/icingaweb2
-        chmod 2770 /etc/icingaweb2
-        mkdir -p /etc/icingaweb2/enabledModules
-        chown -R apache:icingaweb2 /etc/icingaweb2/*
-        find /etc/icingaweb2 -type f -name "*.ini" -exec chmod 660 {} \;
-        find /etc/icingaweb2 -type d -exec chmod 2770 {} \;
-
         echo "Enabling icinga2 features."
         # enable icinga2 features if not already there
         icinga2 feature enable ido-mysql command

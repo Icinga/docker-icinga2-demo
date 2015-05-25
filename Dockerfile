@@ -17,7 +17,7 @@ RUN yum -y update; yum clean all; \
  yum -y install epel-release; yum clean all; \
  yum -y install http://packages.icinga.org/epel/7/release/noarch/icinga-rpm-release-7-1.el7.centos.noarch.rpm; yum clean all
 
-RUN yum -y install vim bind-utils cronie logrotate supervisor openssh-server rsyslog sudo pwgen psmisc \
+RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh-server rsyslog sudo pwgen psmisc \
  httpd nagios-plugins-all mariadb-server mariadb-libs mariadb; yum clean all; \
  yum -y install --enablerepo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli php-ZendFramework php-ZendFramework-Db-Adapter-Pdo-Mysql; \
  yum clean all;
@@ -40,8 +40,29 @@ RUN sed -i -e 's/^\(UsePAM\s\+.\+\)/#\1/gi' /etc/ssh/sshd_config; \
 # disable selinux
 #RUN setenforce 0
 
-# supervisor
-RUN mkdir -p /var/log/supervisor
+# fixes at build time (we can't do that at user's runtime)
+# setuid problem https://github.com/docker/docker/issues/6828
+# can be circumvented for icinga2.cmd w/ mkfifo and chown
+# (icinga2 does not re-create the file)
+RUN mkdir -p /var/log/supervisor; \
+ chown -R icinga:root /etc/icinga2; \
+ mkdir -p /var/run/icinga2; \
+ mkdir -p /var/log/icinga2; \
+ chown icinga:icingacmd /var/run/icinga2; \
+ chown icinga:icingacmd /var/log/icinga2; \
+ mkdir -p /var/run/icinga2/cmd; \
+ mkfifo /var/run/icinga2/cmd/icinga2.cmd; \
+ chown -R icinga:icingacmd /var/run/icinga2/cmd; \
+ chmod 2750 /var/run/icinga2/cmd; \
+ chown -R icinga:icinga /var/lib/icinga2; \
+ usermod -a -G icingacmd apache >> /dev/null; \
+ chown root:icingaweb2 /etc/icingaweb2; \
+ chmod 2770 /etc/icingaweb2; \
+ mkdir -p /etc/icingaweb2/enabledModules; \
+ chown -R apache:icingaweb2 /etc/icingaweb2/*; \
+ find /etc/icingaweb2 -type f -name "*.ini" -exec chmod 660 {} \; ; \
+ find /etc/icingaweb2 -type d -exec chmod 2770 {} \;
+
 
 # ports
 EXPOSE 22 80 443 5665 3306

@@ -14,6 +14,8 @@ docker image `icinga/icinga2`.
 
 ## TODOs
 
+* fix ping in el7 - https://bugzilla.redhat.com/show_bug.cgi?id=1142311
+* fix setuid in el7 (icinga2.cmd group)
 * demo config for icinga2
 * snapshot or release packages?
 * more than centos7
