@@ -7,11 +7,17 @@ MAINTAINER Michael Friedrich
 # for systemd
 ENV container docker
 
+# docs are not installed by default https://github.com/docker/docker/issues/10650 https://registry.hub.docker.com/_/centos/
+# official docs are wrong, go for http://superuser.com/questions/784451/centos-on-docker-how-to-install-doc-files
+# we'll need that for mysql schema import for icingaweb2
+RUN sed -i '/excludedocs/d' /etc/rpm/macros.imgcreate
+RUN sed -i '/nodocs/d' /etc/yum.conf
+
 RUN yum -y update; yum clean all
 RUN yum -y install epel-release; yum clean all
 RUN yum -y install http://packages.icinga.org/epel/7/release/noarch/icinga-rpm-release-7-1.el7.centos.noarch.rpm; yum clean all
 
-RUN yum -y install vim bind-utils cronie logrotate supervisor openssh-server rsyslog sudo pwgen; yum clean all;
+RUN yum -y install vim bind-utils cronie logrotate supervisor openssh-server rsyslog sudo pwgen psmisc; yum clean all;
 
 # includes supervisor config
 ADD content/ /
