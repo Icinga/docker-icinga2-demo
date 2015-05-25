@@ -34,7 +34,7 @@ RUN echo -e '\nDefaults:%wheel !requiretty' >> /etc/sudoers
 
 RUN yum -y install httpd nagios-plugins-all mariadb-server mariadb-libs mariadb
 
-RUN yum -y install --enable-repo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli
+RUN yum -y install --enablerepo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli
 
 RUN yum -y install mariadb-server mariadb-libs mariadb
 
