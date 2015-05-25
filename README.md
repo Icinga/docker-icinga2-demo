@@ -29,11 +29,15 @@ docker image `icinga/icinga2`.
 
 ## Usage
 
-Start a new privileged container, bind the cgroups and port 80:
+Start a new container, bind the container's port 80 to localhost:3080
+and let the initialization do its job:
 
-    $ sudo docker run -ti -p 3080:80 icinga/icinga2:latest
+    $ sudo docker run -ti -p 3080:80 icinga/icinga2
+
+If you want to invoke it manually, go for
 
     $ sudo docker run -ti -p 3080:80 icinga/icinga2 /bin/bash
+    # /opt/icinga2/initdocker
 
 Build a new container based on this repository:
 
@@ -63,7 +67,7 @@ configuration is also entered to skip the setup wizard.
 
 ## Ports
 
-The following ports are exposed: 22, 80, 443, 5665
+The following ports are exposed: 22, 80, 443, 3306, 5665
 
 ## Volumes
 
