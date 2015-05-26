@@ -26,6 +26,9 @@ RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh-s
 ADD content/ /
 RUN chmod u+x /opt/icinga2/initdocker
 
+# set icinga2 NodeName
+RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/icinga2/constants.conf;
+
 # no PAM
 # http://stackoverflow.com/questions/18173889/cannot-access-centos-sshd-on-docker
 RUN sed -i -e 's/^\(UsePAM\s\+.\+\)/#\1/gi' /etc/ssh/sshd_config; \
