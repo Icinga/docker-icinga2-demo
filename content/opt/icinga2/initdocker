@@ -2,10 +2,19 @@
 
 set -e
 
+function echo_log {
+	DATE='date +%Y/%m/%d:%H:%M:%S'
+	echo `$DATE`" $1"
+}
+
 initfile=/opt/icinga2/init.done
 
+# update to latest snapshot packages
+echo_log "Fetching latest icinga* snapshot packages."
+yum update icinga2 icinga2-ido-mysql icingaweb2 icingacli; yum clean all
+
 if [ ! -f "${initfile}" ]; then
-        echo "Starting DB schema import. This might take a while (20sec+)."
+        echo_log "Starting DB schema import. This might take a while (20sec+)."
         mysql_install_db --user=mysql --ldata=/var/lib/mysql 2>&1 >/dev/null
         /usr/bin/mysqld_safe 2>&1 >/dev/null &
         sleep 10s
@@ -17,17 +26,16 @@ if [ ! -f "${initfile}" ]; then
         killall mysqld
         sleep 10s
 
-        echo "Enabling icinga2 features."
+        echo_log "Enabling icinga2 features."
         # enable icinga2 features if not already there
         icinga2 feature enable ido-mysql command
 
-        echo "Enabling icingaweb2 modules."
+        echo_log "Enabling icingaweb2 modules."
         if [[ -L /etc/icingaweb2/enabledModules/monitoring ]]; then echo "Symlink for /etc/icingaweb2/enabledModules/monitoring exists already...skipping"; else ln -s /usr/share/icingaweb2/modules/monitoring /etc/icingaweb2/enabledModules/monitoring; fi
         if [[ -L /etc/icingaweb2/enabledModules/doc ]]; then echo "Symlink for /etc/icingaweb2/enabledModules/doc exists already...skipping"; else ln -s /usr/share/icingaweb2/modules/doc /etc/icingaweb2/enabledModules/doc; fi
 
         touch ${initfile}
 fi
 
-echo "Starting Supervisor."
-echo "CTRL-C won't stop the container from running with or without the -d (daemon) option."
+echo_log "Starting Supervisor. CTRL-C will stop the container."
 /usr/bin/supervisord -c /etc/supervisord.conf >> /dev/null
