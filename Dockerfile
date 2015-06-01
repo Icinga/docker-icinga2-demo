@@ -49,7 +49,7 @@ RUN sed -i -e 's/^\(UsePAM\s\+.\+\)/#\1/gi' /etc/ssh/sshd_config; \
 # can be circumvented for icinga2.cmd w/ mkfifo and chown
 # (icinga2 does not re-create the file)
 RUN mkdir -p /var/log/supervisor; \
- chmod 4755 /bin/ping; \
+ chmod 4755 /bin/ping /bin/ping6; \
  chown -R icinga:root /etc/icinga2; \
  mkdir -p /var/run/icinga2; \
  mkdir -p /var/log/icinga2; \
