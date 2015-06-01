@@ -45,9 +45,11 @@ RUN sed -i -e 's/^\(UsePAM\s\+.\+\)/#\1/gi' /etc/ssh/sshd_config; \
 
 # fixes at build time (we can't do that at user's runtime)
 # setuid problem https://github.com/docker/docker/issues/6828
+# 4755 ping is required for icinga user calling check_ping
 # can be circumvented for icinga2.cmd w/ mkfifo and chown
 # (icinga2 does not re-create the file)
 RUN mkdir -p /var/log/supervisor; \
+ chmod 4755 /bin/ping; \
  chown -R icinga:root /etc/icinga2; \
  mkdir -p /var/run/icinga2; \
  mkdir -p /var/log/icinga2; \
