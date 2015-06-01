@@ -73,7 +73,7 @@ RUN mkdir -p /var/log/supervisor; \
 EXPOSE 22 80 443 5665 3306
 
 # volumes
-VOLUME ["/etc/icinga2", "/etc/icingaweb2", "/var/lib/icinga2"]
+VOLUME ["/etc/icinga2", "/etc/icingaweb2", "/var/lib/icinga2", "/usr/share/icingaweb2"]
 
 # for root
 RUN echo 'syntax on' >> /root/.vimrc; \

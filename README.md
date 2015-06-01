@@ -18,8 +18,8 @@ It serves as container for demos, tests and development.
 ## TODOs
 
 * fix setuid in el7 (icinga2.cmd group)
+* Add ssh support
 * demo config for icinga2
-* snapshot or release packages?
 * install icinga2 syntax highlighting for vim
 * systemd support (requires privileged run)
 * documentation
@@ -74,11 +74,13 @@ The following ports are exposed: 22, 80, 443, 3306, 5665
 
 ## Volumes
 
-These volumes can be mounted in order to test various stuff.
+These volumes can be mounted in order to test and develop various stuff.
 
     /etc/icinga2
     /etc/icingaweb2
+
     /var/lib/icinga2
+    /usr/share/icingaweb2
 
 # Thanks
 
