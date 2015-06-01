@@ -2,11 +2,14 @@
 
 > **Note**
 >
-> This is unfinished work-in-progress and will be moved
-> to an official icinga repository once finished.
+> This is not yet finished and will be uploaded to
+> [Docker Hub](https://registry.hub.docker.com/repos/icinga/)
+> then.
 
 This repository is used as source for the
 docker image `icinga/icinga2`.
+
+It serves as container for demos, tests and development.
 
 ## Requirements
 
@@ -18,7 +21,6 @@ docker image `icinga/icinga2`.
 * fix setuid in el7 (icinga2.cmd group)
 * demo config for icinga2
 * snapshot or release packages?
-* more than centos7
 * install icinga2 syntax highlighting for vim
 * systemd support (requires privileged run)
 * documentation
@@ -65,7 +67,7 @@ The configuration is located in /etc/icingaweb2 which is exposed as volume from
 docker.
 
 By default the icingaweb2 database is created including the `icingaadmin` user. Additional
-configuration is also entered to skip the setup wizard.
+configuration is also added to skip the setup wizard.
 
 ## Ports
 
