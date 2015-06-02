@@ -31,7 +31,10 @@ initfile=/opt/icinga2/init.done
 
 # update to latest snapshot packages
 echo_log "Fetching latest icinga* snapshot packages."
-yum update --enablerepo=icinga-snapshot-builds -y icinga2 icinga2-ido-mysql icingaweb2 icingacli; yum clean all 2>&1 >/dev/null
+{
+  yum update --enablerepo=icinga-snapshot-builds -y icinga2 icinga2-ido-mysql icingaweb2 icingacli
+  yum clean all
+} &> /dev/null
 
 if [ ! -f "${initfile}" ]; then
         echo_log "Starting DB schema import. This might take a while (20sec+)."

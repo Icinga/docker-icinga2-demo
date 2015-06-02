@@ -35,8 +35,8 @@ RUN yum -y update; yum clean all; \
  yum -y install epel-release; yum clean all; \
  yum -y install http://packages.icinga.org/epel/7/release/noarch/icinga-rpm-release-7-1.el7.centos.noarch.rpm; yum clean all
 
-RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh-server rsyslog sudo pwgen psmisc \
- httpd nagios-plugins-all mariadb-server mariadb-libs mariadb; yum clean all; \
+RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh openssh-server openssh-client rsyslog sudo passwd sed which vim-enhanced pwgen psmisc \
+ httpd nagios-plugins-all mariadb-server mariadb-libs mariadb; \
  yum -y install --enablerepo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli php-ZendFramework php-ZendFramework-Db-Adapter-Pdo-Mysql; \
  yum clean all;
 
@@ -49,17 +49,22 @@ RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/ic
 
 # no PAM
 # http://stackoverflow.com/questions/18173889/cannot-access-centos-sshd-on-docker
-RUN sed -i -e 's/^\(UsePAM\s\+.\+\)/#\1/gi' /etc/ssh/sshd_config; \
- echo -e '\nUsePAM no' >> /etc/ssh/sshd_config; \
+RUN sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config; \
+ echo "sshd: ALL" >> /etc/hosts.allow; \
+ rm -f /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_rsa_key && \
+ ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_ecdsa_key && \
+ ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key && \
+ echo 'root:icingar0xx' | chpasswd; \
  useradd -g wheel appuser; \
  echo 'appuser:appuser' | chpasswd; \
  sed -i -e 's/^\(%wheel\s\+.\+\)/#\1/gi' /etc/sudoers; \
  echo -e '\n%wheel ALL=(ALL) ALL' >> /etc/sudoers; \
  echo -e '\nDefaults:root   !requiretty' >> /etc/sudoers; \
- echo -e '\nDefaults:%wheel !requiretty' >> /etc/sudoers
-
-# disable selinux
-#RUN setenforce 0
+ echo -e '\nDefaults:%wheel !requiretty' >> /etc/sudoers; \
+ echo 'syntax on' >> /root/.vimrc; \
+ echo 'alias vi="vim"' >> /root/.bash_profile; \
+ echo 'syntax on' >> /home/appuser/.vimrc; \
+ echo 'alias vi="vim"' >> /home/appuser/.bash_profile;
 
 # fixes at build time (we can't do that at user's runtime)
 # setuid problem https://github.com/docker/docker/issues/6828
@@ -92,12 +97,6 @@ EXPOSE 22 80 443 5665 3306
 
 # volumes
 VOLUME ["/etc/icinga2", "/etc/icingaweb2", "/var/lib/icinga2", "/usr/share/icingaweb2"]
-
-# for root
-RUN echo 'syntax on' >> /root/.vimrc; \
- echo 'alias vi="vim"' >> /root/.bash_profile; \
- echo 'syntax on' >> /home/appuser/.vimrc; \
- echo 'alias vi="vim"' >> /home/appuser/.bash_profile;
 
 # change this to entrypoint preventing bash login
 CMD ["/opt/icinga2/initdocker"]

@@ -17,12 +17,7 @@ It serves as container for demos, tests and development.
 
 ## TODOs
 
-* fix setuid in el7 (icinga2.cmd group)
-* Add ssh support
 * demo config for icinga2
-* install icinga2 syntax highlighting for vim
-* systemd support (requires privileged run)
-* documentation
 
 ## Image details
 
@@ -42,17 +37,29 @@ If you want to invoke it manually, go for
     $ sudo docker run -ti -p 3080:80 icinga/icinga2 /bin/bash
     # /opt/icinga2/initdocker
 
+### Container Build
+
 Build a new container based on this repository:
 
     $ sudo docker pull centos:centos7
     $ sudo docker build -t icinga/icinga2 .
 
+### SSH Access
+
+Even if you can already mount specific [volumes](#volumes) there's ssh access
+available. Make sure to map the port accordingly.
+
+    $ sudo docker run -ti -p 3080:80 -p 3022:22 icinga/icinga2
+
+Then login as `appuser/appuser`. sudo is enabled for this user.
+
+    $ ssh appuser@localhost -p 3022
 
 ## Tools
 
 ### Icinga 2
 
-The configuration is located in /etc/icinga2 which is exposed as volume from
+The configuration is located in /etc/icinga2 which is exposed as [volume](#volumes) from
 docker.
 
 By default the icinga database is created, and `ido-mysql` and `command` features
@@ -60,9 +67,9 @@ are enabled.
 
 ### Icinga Web 2
 
-Icinga Web 2 can be accessed at http://localhost:3080/icingaweb2 w/ icingaadmin:icinga as credentials.
+Icinga Web 2 can be accessed at http://localhost:3080/icingaweb2 w/ `icingaadmin:icinga` as credentials.
 
-The configuration is located in /etc/icingaweb2 which is exposed as volume from
+The configuration is located in /etc/icingaweb2 which is exposed as [volume](#volumes) from
 docker.
 
 By default the icingaweb2 database is created including the `icingaadmin` user. Additional
