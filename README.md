@@ -1,19 +1,18 @@
 # docker-icinga2
 
-> **Note**
->
-> This is not yet finished and will be uploaded to
-> [Docker Hub](https://registry.hub.docker.com/repos/icinga/)
-> then.
-
 This repository is used as source for the
-docker image `icinga/icinga2`.
-
-It serves as container for demos, tests and development.
+docker image `icinga/icinga2` located at [Docker Hub](https://registry.hub.docker.com/repos/icinga/).
 
 ## Requirements
 
-* Docker >= 1.6.0
+* [Docker](https://www.docker.com/whatisdocker/) >= 1.6.0
+
+## Support
+
+This container is used for demos, tests and development only.
+
+If you encounter bugs, please open a new issue at [dev.icinga.org](https://dev.icinga.org/projects/icinga-tools)
+and/or send a patch.
 
 ## Image details
 
