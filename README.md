@@ -15,10 +15,6 @@ It serves as container for demos, tests and development.
 
 * Docker >= 1.6.0
 
-## TODOs
-
-* demo config for icinga2
-
 ## Image details
 
 * Based on centos:centos7 (similar to the Vagrant boxes)
@@ -64,6 +60,9 @@ docker.
 
 By default the icinga database is created, and `ido-mysql` and `command` features
 are enabled.
+
+The container startup will validate the configuration once (e.g. if you have mounted
+the volume).
 
 ### Icinga Web 2
 
