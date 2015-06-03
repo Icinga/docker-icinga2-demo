@@ -36,6 +36,13 @@ echo_log "Fetching latest icinga* snapshot packages."
   yum clean all
 } &> /dev/null
 
+echo_log "Validating the icinga2 configuration first."
+if ! icinga2 daemon -C; then
+	echo_log "Icinga 2 config validation failed. Stopping the container."
+	exit 1
+fi
+
+
 if [ ! -f "${initfile}" ]; then
         echo_log "Starting DB schema import. This might take a while (20sec+)."
         mysql_install_db --user=mysql --ldata=/var/lib/mysql 2>&1 >/dev/null
