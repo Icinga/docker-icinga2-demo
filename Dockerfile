@@ -45,7 +45,9 @@ ADD content/ /
 RUN chmod u+x /opt/icinga2/initdocker
 
 # set icinga2 NodeName
-RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/icinga2/constants.conf;
+RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/icinga2/constants.conf; \
+ icinga2 pki new-cert --cn docker-icinga2 --key /etc/icinga2/pki/docker-icinga2.key --csr /etc/icinga2/pki/docker-icinga2.csr; \
+ icinga2 pki sign-csr --csr /etc/icinga2/pki/docker-icinga2.csr --cert /etc/icinga2/pki/docker-icinga2.crt
 
 # no PAM
 # http://stackoverflow.com/questions/18173889/cannot-access-centos-sshd-on-docker
