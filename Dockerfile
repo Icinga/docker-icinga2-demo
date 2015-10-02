@@ -93,6 +93,8 @@ RUN mkdir -p /var/log/supervisor; \
  find /etc/icingaweb2 -type f -name "*.ini" -exec chmod 660 {} \; ; \
  find /etc/icingaweb2 -type d -exec chmod 2770 {} \;
 
+# configure PHP timezone
+RUN sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini
 
 # ports
 EXPOSE 22 80 443 5665 3306
