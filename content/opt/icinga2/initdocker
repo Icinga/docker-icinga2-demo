@@ -67,5 +67,25 @@ if [ ! -f "${initfile}" ]; then
         touch ${initfile}
 fi
 
+if [ -n $ICINGA2_FEATURE_GRAPHITE ]; then
+  echo_log "Enabling Icinga 2 Graphite feature."
+  icinga2 feature enable graphite
+
+cat <<EOF >/etc/icinga2/features-enabled/graphite.conf
+/**
+ * The GraphiteWriter type writes check result metrics and
+ * performance data to a graphite tcp socket.
+ */
+
+library "perfdata"
+
+object GraphiteWriter "graphite" {
+  host = "$ICINGA2_FEATURE_GRAPHITE_HOST"
+  port = "$ICINGA2_FEATURE_GRAPHITE_PORT"
+}
+EOF
+
+fi
+
 echo_log "Starting Supervisor. CTRL-C will stop the container."
 /usr/bin/supervisord -c /etc/supervisord.conf >> /dev/null

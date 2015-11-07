@@ -35,19 +35,23 @@ RUN yum -y update; yum clean all; \
 RUN [ -f /etc/rpm/macros.imgcreate ] && sed -i '/excludedocs/d' /etc/rpm/macros.imgcreate || exit 0
 RUN [ -f /etc/yum.conf ] && sed -i '/nodocs/d' /etc/yum.conf || exit 0
 
-RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh openssh-server openssh-client rsyslog sudo passwd sed which vim-enhanced pwgen psmisc \
+RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh openssh-server openssh-client rsyslog sudo passwd sed which vim-enhanced pwgen psmisc mailx \
  httpd nagios-plugins-all mariadb-server mariadb-libs mariadb; \
  yum -y install --enablerepo=icinga-snapshot-builds icinga2 icinga2-doc icinga2-ido-mysql icingaweb2 icingacli php-ZendFramework php-ZendFramework-Db-Adapter-Pdo-Mysql; \
  yum clean all;
+
+# create api certificates and users (will be overridden later)
+RUN icinga2 api setup
+
+# set icinga2 NodeName and create proper certificates required for the API
+RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/icinga2/constants.conf; \
+ icinga2 pki new-cert --cn docker-icinga2 --key /etc/icinga2/pki/docker-icinga2.key --csr /etc/icinga2/pki/docker-icinga2.csr; \
+ icinga2 pki sign-csr --csr /etc/icinga2/pki/docker-icinga2.csr --cert /etc/icinga2/pki/docker-icinga2.crt;
 
 # includes supervisor config
 ADD content/ /
 RUN chmod u+x /opt/icinga2/initdocker
 
-# set icinga2 NodeName
-RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/icinga2/constants.conf; \
- icinga2 pki new-cert --cn docker-icinga2 --key /etc/icinga2/pki/docker-icinga2.key --csr /etc/icinga2/pki/docker-icinga2.csr; \
- icinga2 pki sign-csr --csr /etc/icinga2/pki/docker-icinga2.csr --cert /etc/icinga2/pki/docker-icinga2.crt
 
 # no PAM
 # http://stackoverflow.com/questions/18173889/cannot-access-centos-sshd-on-docker
@@ -76,6 +80,8 @@ RUN sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/ss
 RUN mkdir -p /var/log/supervisor; \
  chmod 4755 /bin/ping /bin/ping6; \
  chown -R icinga:root /etc/icinga2; \
+ mkdir -p /etc/icinga2/pki; \
+ chown -R icinga:icinga /etc/icinga2/pki; \
  mkdir -p /var/run/icinga2; \
  mkdir -p /var/log/icinga2; \
  chown icinga:icingacmd /var/run/icinga2; \
@@ -96,11 +102,11 @@ RUN mkdir -p /var/log/supervisor; \
 # configure PHP timezone
 RUN sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini
 
-# ports
+# ports (icinga2 api & cluster (5665), mysql (3306))
 EXPOSE 22 80 443 5665 3306
 
 # volumes
-VOLUME ["/etc/icinga2", "/etc/icingaweb2", "/var/lib/icinga2", "/usr/share/icingaweb2"]
+VOLUME ["/etc/icinga2", "/etc/icingaweb2", "/var/lib/icinga2", "/usr/share/icingaweb2", "/var/lib/mysql"]
 
 # change this to entrypoint preventing bash login
 CMD ["/opt/icinga2/initdocker"]
