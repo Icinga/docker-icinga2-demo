@@ -67,7 +67,7 @@ if [ ! -f "${initfile}" ]; then
         touch ${initfile}
 fi
 
-if [ -n $ICINGA2_FEATURE_GRAPHITE ]; then
+if [[ -n $ICINGA2_FEATURE_GRAPHITE ]]; then
   echo_log "Enabling Icinga 2 Graphite feature."
   icinga2 feature enable graphite
 
