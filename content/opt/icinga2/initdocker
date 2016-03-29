@@ -87,5 +87,10 @@ EOF
 
 fi
 
+# Create /var/log/httpd if !exists
+if [ ! -d /var/log/httpd ];  then
+	mkdir -p /var/log/httpd
+fi
+
 echo_log "Starting Supervisor. CTRL-C will stop the container."
 /usr/bin/supervisord -c /etc/supervisord.conf >> /dev/null
