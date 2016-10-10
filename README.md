@@ -1,7 +1,7 @@
 # docker-icinga2
 
 This repository is used as source for the
-docker image `icinga/icinga2` located at [Docker Hub](https://registry.hub.docker.com/repos/icinga/).
+docker image `icinga/icinga2` located at [Docker Hub](https://hub.docker.com/r/icinga/icinga2/).
 
 ## Requirements
 
