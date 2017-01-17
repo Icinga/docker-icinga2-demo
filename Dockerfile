@@ -1,7 +1,7 @@
 #/******************************************************************************
 # * docker-icinga2                                                             *
 # * Dockerfile for Icinga 2 and Icinga Web 2                                   *
-# * Copyright (C) 2015 Icinga Development Team (http://www.icinga.org)         *
+# * Copyright (C) 2015-2017 Icinga Development Team (https://www.icinga.com)   *
 # *                                                                            *
 # * This program is free software; you can redistribute it and/or              *
 # * modify it under the terms of the GNU General Public License                *
@@ -27,7 +27,7 @@ ENV container docker
 
 RUN yum -y update; yum clean all; \
  yum -y install epel-release; yum clean all; \
- yum -y install http://packages.icinga.org/epel/7/release/noarch/icinga-rpm-release-7-1.el7.centos.noarch.rpm; yum clean all
+ yum -y install http://packages.icinga.com/epel/7/release/noarch/icinga-rpm-release-7-1.el7.centos.noarch.rpm; yum clean all
 
 # docs are not installed by default https://github.com/docker/docker/issues/10650 https://registry.hub.docker.com/_/centos/
 # official docs are wrong, go for http://superuser.com/questions/784451/centos-on-docker-how-to-install-doc-files

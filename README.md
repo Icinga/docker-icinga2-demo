@@ -11,8 +11,8 @@ docker image `icinga/icinga2` located at [Docker Hub](https://hub.docker.com/r/i
 
 This container is used for demos, tests and development only.
 
-If you encounter bugs, please open a new issue at [dev.icinga.org](https://dev.icinga.org/projects/icinga-tools)
-and/or send a patch.
+If you encounter bugs, please open a new issue at https://github.com/icinga/docker-icinga2
+and/or send a PR.
 
 ## Image details
 

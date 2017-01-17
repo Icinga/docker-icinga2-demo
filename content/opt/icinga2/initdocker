@@ -3,7 +3,7 @@
 #/******************************************************************************
 # * docker-icinga2                                                             *
 # * Dockerfile for Icinga 2 and Icinga Web 2                                   *
-# * Copyright (C) 2015 Icinga Development Team (http://www.icinga.org)         *
+# * Copyright (C) 2015-2017 Icinga Development Team (https://www.icinga.com)   *
 # *                                                                            *
 # * This program is free software; you can redistribute it and/or              *
 # * modify it under the terms of the GNU General Public License                *
