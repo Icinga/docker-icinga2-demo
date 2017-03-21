@@ -1,5 +1,5 @@
 #/******************************************************************************
-# * docker-icinga2                                                             *
+# * docker-icinga2-demo                                                            *
 # * Dockerfile for Icinga 2 and Icinga Web 2                                   *
 # * Copyright (C) 2015-2017 Icinga Development Team (https://www.icinga.com)   *
 # *                                                                            *
@@ -44,9 +44,9 @@ RUN yum -y install vim hostname bind-utils cronie logrotate supervisor openssh o
 RUN icinga2 api setup
 
 # set icinga2 NodeName and create proper certificates required for the API
-RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2"/gi' /etc/icinga2/constants.conf; \
- icinga2 pki new-cert --cn docker-icinga2 --key /etc/icinga2/pki/docker-icinga2.key --csr /etc/icinga2/pki/docker-icinga2.csr; \
- icinga2 pki sign-csr --csr /etc/icinga2/pki/docker-icinga2.csr --cert /etc/icinga2/pki/docker-icinga2.crt;
+RUN sed -i -e 's/^.* NodeName = .*/const NodeName = "docker-icinga2-demo"/gi' /etc/icinga2/constants.conf; \
+ icinga2 pki new-cert --cn docker-icinga2-demo --key /etc/icinga2/pki/docker-icinga2-demo.key --csr /etc/icinga2/pki/docker-icinga2-demo.csr; \
+ icinga2 pki sign-csr --csr /etc/icinga2/pki/docker-icinga2-demo.csr --cert /etc/icinga2/pki/docker-icinga2-demo.crt;
 
 # includes supervisor config
 ADD content/ /

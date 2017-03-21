@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #/******************************************************************************
-# * docker-icinga2                                                             *
+# * docker-icinga2-demo                                                             *
 # * Dockerfile for Icinga 2 and Icinga Web 2                                   *
 # * Copyright (C) 2015-2017 Icinga Development Team (https://www.icinga.com)   *
 # *                                                                            *
