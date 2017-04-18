@@ -3,6 +3,12 @@
 This repository is used as source for the
 docker image `icinga/icinga2-demo` located at [Docker Hub](https://hub.docker.com/r/icinga/icinga2-demo/).
 
+## DEPRECATED
+
+This repository is no longer maintained!
+
+Please check out what members of the community shared on [hub.docker.com](https://hub.docker.com/search/?isAutomated=0&isOfficial=0&page=1&pullCount=1&q=icinga2&starCount=0).
+
 ## Requirements
 
 * [Docker](https://www.docker.com/whatisdocker/) >= 1.6.0
