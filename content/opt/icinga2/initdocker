@@ -92,5 +92,8 @@ if [ ! -d /var/log/httpd ];  then
 	mkdir -p /var/log/httpd
 fi
 
+# delete old pids before start
+find /var/run/ -type f -iname *.pid -exec rm {} \;
+
 echo_log "Starting Supervisor. CTRL-C will stop the container."
 /usr/bin/supervisord -c /etc/supervisord.conf >> /dev/null
